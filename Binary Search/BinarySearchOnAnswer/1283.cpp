@@ -2,26 +2,30 @@
 using namespace std;
 
 class Solution {
-    bool valid(vector<int>& nums, int t, int m) {
+    bool check(vector<int>& nums, int div, int k) {
         int sum = 0;
-        for(auto it: nums){
-            sum += ceil(float(it)/float(m)) ;
+        for(int i=0; i<nums.size(); i++) {
+            if(nums[i]%div!=0) {
+                sum += nums[i]/div + 1;
+            } else {
+                sum += nums[i]/div;
+            }
         }
-        return sum <= t ;
+        return sum <= k;
     }
 public:
-    int smallestDivisor(vector<int>& nums, int t) {
+    int smallestDivisor(vector<int>& nums, int k) {
         int n = nums.size();
         int l = 1;
         int h = *max_element(nums.begin(), nums.end());
         int ans = -1;
         while(l<=h) {
-            int m = (l+h) >> 1;
-            if(valid(nums, t, m)==true) {
-                ans = m;
-                h = m - 1;
+            int mid = l + (h-l)/2;
+            if(check(nums, mid, k)) {
+                ans = mid;
+                h = mid-1;
             } else {
-                l = m + 1;
+                l = mid+1;
             }
         }
         return ans;
